@@ -1,0 +1,99 @@
+public class Data {
+  // Proprietà
+	private int dAy;
+	private int mOnth;
+	private int yEar;
+	// Costruttore
+	public Data () {
+		this.dAy = 1;
+		this.mOnth = 1;
+		this.yEar = 2000;
+	}
+	public Data (int dAy, int mOnth, int yEar) {
+		this.dAy = dAy;
+		this.mOnth = mOnth;
+		this.yEar = yEar;
+	}
+	public Data (Data cLone) {
+		this.dAy = cLone.dAy;
+		this.mOnth = cLone.mOnth;
+		this.yEar = cLone.yEar;
+	}
+	// Metodi Stardard Set
+	public void setDay (int value) { this.dAy=value; }
+	public void setMonth (int value) { this.mOnth=value; }
+	public void setYear (int value) { this.yEar=value; }
+	// Metodi Standard Get
+	public int getDay () { return this.dAy; }
+	public int getMonth () { return this.mOnth; }
+	public int getYear () { return this.yEar; }
+	// Metodi Dinamici
+	public boolean Bisestile () {
+		if (this.yEar % 4 == 0 && (this.yEar % 100 != 0 || this.yEar % 400 == 0)) {
+			return true;
+		}
+		else return false;
+	}
+	public int MonthInt () {
+		int[] mOnthInt = {31,28,31,30,31,30,31,31,30,31,30,31};
+		int nGP=0;
+		for (int i=0 ; i<(this.mOnth-1) ; i++) {
+			nGP+=mOnthInt[i];
+		}
+	    if(this.mOnth>2) { if(this.Bisestile()) { nGP++; }}
+		return nGP;
+	}
+	public int nGiorniSt () {
+		int nG = this.MonthInt()+this.dAy;
+		return nG;
+	}
+	public int nGiorniFn () {
+		if(this.Bisestile()) { return (366-this.nGiorniSt()); }
+		else { return (365-this.nGiorniSt()); }
+	}
+        public int YearInter (Data mIn) {
+		int IntYear=0;
+		Data yEarMin = new Data(mIn);
+		for ( yEarMin.yEar++ ; yEarMin.yEar<this.yEar ; yEarMin.yEar++ ) {
+			if(yEarMin.Bisestile()) { IntYear+=366; }
+			else { IntYear+=365; }
+		}
+		return IntYear;
+	}
+	public int dIfGiorni (Data d2) {
+		int dIfDay=0;
+		if(this.yEar > d2.yEar) { dIfDay = this.YearInter(d2)+this.nGiorniSt()+d2.nGiorniFn(); }
+		else if(this.yEar < d2.yEar) { dIfDay = d2.YearInter(this)+d2.nGiorniSt()+this.nGiorniFn(); }
+		else {
+			if(this.mOnth > d2.mOnth) { dIfDay = this.nGiorniSt()-d2.nGiorniSt(); }
+			else if(this.mOnth < d2.mOnth) { dIfDay = d2.nGiorniSt()-this.nGiorniSt(); }
+			else {
+				if(this.dAy > d2.dAy) { dIfDay = this.dAy-d2.dAy; }
+				else if(this.dAy < d2.dAy) { dIfDay = d2.dAy-this.dAy; }
+			}
+		}
+		return dIfDay;
+	}
+	public boolean equals (Data d2) {
+		if(this.dAy == d2.dAy && this.mOnth == d2.mOnth && this.yEar == d2.yEar) return true;
+		else return false;
+	}
+	public int comPare (Data d2) {
+		if(this.equals(d2)) return 0;
+		else {
+			if(this.yEar > d2.yEar) return 1;
+			else if(this.yEar < d2.yEar) return -1;
+			else {
+				if(this.mOnth > d2.mOnth) return 1;
+				else if(this.mOnth < d2.mOnth) return -1;
+				else {
+					if(this.dAy > d2.dAy) return 1;
+					else return -1;
+				}
+			}
+		}
+	}
+	public String toString () {
+		return this.dAy+"/"+this.mOnth+"/"+this.yEar;
+	}
+}
